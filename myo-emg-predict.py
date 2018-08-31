@@ -2,7 +2,7 @@
 """
 Created on Wed Aug 29 13:39:13 2018
 
-@author: Hassan
+@author: Hassan Yousuf & Nabeel Hussain
 """
 from __future__ import print_function
 import sklearn.ensemble
@@ -14,6 +14,7 @@ import threading
 import collections
 import math
 import csv
+import _pickle as cPickle
 
 
 # Complete code for training and predicting EMG data in Python using RandomForestClassifier via Myo Armband 2
@@ -81,22 +82,6 @@ status = 0
 
 X = []
 
-def toEuler(quat):
-    quat = quat[0]
-
-    # Roll
-    sin = 2.0 * (quat.w * quat.w + quat.y * quat.z)
-    cos = +1.0 - 2.0 * (quat.x * quat.x + quat.y * quat.y)
-    roll = math.atan2(sin, cos)
-
-    # Pitch
-    pitch = math.asin(2 * (quat.w * quat.y - quat.z * quat.x))
-
-    # Yaw
-    sin = 2.0 * (quat.w * quat.z + quat.x * quat.y)
-    cos = +1.0 - 2.0 * (quat.y * quat.y + quat.z * quat.z)
-    yaw = math.atan2(sin, cos)
-    return [pitch, roll, yaw]
 
 class Listener(DeviceListener):
     def __init__(self, queue_size=1):
@@ -119,7 +104,6 @@ class Listener(DeviceListener):
     def get_ori_data(self):
         with self.lock:
             return list(self.ori_data_queue)
-
 
 init()
 hub = Hub()
@@ -145,9 +129,89 @@ ges3 = ["Spread Fingers", "Wave Out", "Wave In", "Fist", "Rest"]
 
 ges = ges3
 
+
+for a in range(1,4):
+
+    print("\nGesture -- ", ges[0]," : Ready?")
+    input("Press Enter to continue...")
+    X = []
+    while(1):
+        if len(X) > 20:
+            # print(X[-1])
+            train_1.append(np.asarray(X))
+            X = []
+            if len(train_1) > a*req_iter:
+                break
+            myFile = open('dataemg.csv', 'a')
+            with myFile:
+                writer = csv.writer(myFile)
+                writer.writerows(train_1)
+
+    print("\nGesture -- ", ges[1]," : Ready?")
+    input("Press Enter to continue...")
+    X = []
+    while(1):
+        if len(X) > 20:
+            # print(X[-1])
+            train_2.append(np.asarray(X))
+            X = []
+            if len(train_2) > a*req_iter:
+                break
+            myFile = open('dataemg.csv', 'a')
+            with myFile:
+                writer = csv.writer(myFile)
+                writer.writerows(train_2)
+
+    print("\nGesture -- ", ges[2]," : Ready?")
+    input("Press Enter to continue...")
+    X = []
+    while(1):
+        if len(X) > 20:
+            # print(X[-1])
+            train_3.append(np.asarray(X))
+            X = []
+            if len(train_3) > a*req_iter:
+                break
+            myFile = open('dataemg.csv', 'a')
+            with myFile:
+                writer = csv.writer(myFile)
+                writer.writerows(train_3)
+
+    print("\nGesture -- ", ges[3]," : Ready?")
+    input("Press Enter to continue...")
+    X = []
+    while(1):
+        if len(X) > 20:
+            # print(X[-1])
+            train_4.append(np.asarray(X))
+            X = []
+            if len(train_4) > a*req_iter:
+                break
+            myFile = open('dataemg.csv', 'a')
+            with myFile:
+                writer = csv.writer(myFile)
+                writer.writerows(train_4)
+
+
+    print("\nGesture -- ", ges[4]," : Ready?")
+    input("Press Enter to continue...")
+    X = []
+    while(1):
+        if len(X) > 20:
+            # print(X[-1])
+            train_5.append(np.asarray(X))
+            X = []
+            if len(train_5) > a*req_iter:
+                break
+            myFile = open('dataemg.csv', 'a')
+            with myFile:
+                writer = csv.writer(myFile)
+                writer.writerows(train_5)
+
 train_x = []
 train_y = []
-
+"""
+#opening file 
 from itertools import islice
 with open("dataemg.csv") as myfile:
     train_1 = list(islice(myfile, 20))
@@ -156,7 +220,7 @@ with open("dataemg.csv") as myfile:
     train_4 = list(islice(myfile, 20))
     train_5 = list(islice(myfile, 20))
 
-
+"""
 for a in train_1:
     train_x.append(np.asarray(a))
     train_y.append(1)
@@ -207,6 +271,17 @@ print(train_x_f[0])
 
 print("Training Complete!")
 
+with open('my_dumped_classifier.pkl', 'wb') as fid:
+    cPickle.dump(clf, fid)
+
+"""
+# load it again
+with open('my_dumped_classifier.pkl', 'rb') as fid:
+    gnb_loaded = cPickle.load(fid)
+"""
+
+
+"""
 X = []
 
 toEuler(listener.get_ori_data())
@@ -254,6 +329,6 @@ while(1):
                 print('Pred --- ', ges[4])
 
         X = []
-
+"""
 sleep(1)
 hub.shutdown()
