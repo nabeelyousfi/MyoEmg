@@ -12,10 +12,7 @@ from time import sleep
 import numpy as np
 import threading
 import collections
-import math
-import csv
 import _pickle as cPickle
-
 
 # Complete code for training and predicting EMG data in Python using RandomForestClassifier via Myo Armband 2
 
@@ -79,9 +76,7 @@ def featurize(array):
     return n
 
 status = 0
-
 X = []
-
 
 class Listener(DeviceListener):
     def __init__(self, queue_size=1):
@@ -125,13 +120,9 @@ train_5 = []
 
 ges1 = ['Rock', 'Paper', 'Scissors', 'Lizard', 'Spock']
 ges2 = ['Number 1', 'Number 2', 'Number 3', 'Number 4', 'Number 5']
-ges3 = ["Spread Fingers", "Wave Out", "Wave In", "Fist", "Rest"]
-
-ges = ges3
-
+ges = ["Spread Fingers", "Wave Out", "Wave In", "Fist", "Rest"]
 
 for a in range(1,4):
-
     print("\nGesture -- ", ges[0]," : Ready?")
     input("Press Enter to continue...")
     X = []
@@ -186,10 +177,6 @@ for a in range(1,4):
             X = []
             if len(train_5) > a*req_iter:
                 break
-            myFile = open('dataemg.csv', 'a')
-            with myFile:
-                writer = csv.writer(myFile)
-                writer.writerows(train_5)
 
 train_x = []
 train_y = []
